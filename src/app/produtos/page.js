@@ -92,7 +92,7 @@ export default function Produtos() {
         </div>
       </div>
 
-      {isModalOpen && (
+      {isModalOpen && categorias &&(
         <AdicionarProdutoModal setIsOpen={setIsModalOpen} categorias={categorias} />
       )}
     </div>
