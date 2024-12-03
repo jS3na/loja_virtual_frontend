@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, ShoppingBag, Users, Settings, HelpCircle, Menu, X } from 'lucide-react'
+import { Home, ShoppingBag, Users, Settings, HelpCircle, Menu, X, Tag } from 'lucide-react'
 
 const menuItems = [
   { icon: Home, label: 'Início', href: '/' },
   { icon: ShoppingBag, label: 'Produtos', href: '/produtos' },
-  { icon: Settings, label: 'Categorias', href: '/categorias' },
+  { icon: Tag, label: 'Categorias', href: '/categorias' },
 ]
 
 export function Sidebar() {

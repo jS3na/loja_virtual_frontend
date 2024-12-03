@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import api from "../../utils/api";
 
-const AdicionarCategoriaModal = ({setIsOpen}) => {
+const AdicionarCategoriaModal = ({setIsOpen, fetchCategorias}) => {
     const [formData, setFormData] = useState({
         nome: "",
         descricao: "",
@@ -24,10 +24,10 @@ const AdicionarCategoriaModal = ({setIsOpen}) => {
             await api.post("/categorias/store", formData);
             setMessage("Categoria adicionado com sucesso!");
             setFormData({ nome: "" });
-            setTimeout(() => {
-                setMessage("");
-                setIsOpen(false);
-            }, 2000);
+
+            setMessage("");
+            setIsOpen(false);
+            fetchCategorias();
         } catch (error) {
             console.error("Erro ao adicionar o produto:", error);
             setMessage("Erro ao adicionar o produto. Tente novamente.");

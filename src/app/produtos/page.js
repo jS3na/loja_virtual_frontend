@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react"
 import api from "../../../utils/api"
 import AdicionarProdutoModal from "../../../components/Produtos/AdicionarProdutoModal"
+import EditarProdutoModal from "../../../components/Produtos/EditarProdutoModal"
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([])
   const [categorias, setCategorias] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalEditarOpen, setIsModalEditarOpen] = useState(false) // For Edit Modal
+  const [produtoIdEditar, setProdutoIdEditar] = useState(null) // Store the product ID for editing
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -22,10 +25,13 @@ export default function Produtos() {
       setProdutos(response.data)
     } catch (error) {
       console.error("Erro ao buscar produtos:", error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const fetchCategorias = async () => {
+    setIsLoading(true)
     try {
       const response = await api.get("/categorias");
       setCategorias(response.data);
@@ -35,6 +41,11 @@ export default function Produtos() {
       setIsLoading(false);
     }
   };
+
+  const handleEditClick = (produtoId) => {
+    setProdutoIdEditar(produtoId) // Set the product ID for editing
+    setIsModalEditarOpen(true) // Open the Edit Modal
+  }
 
   return (
     <div className="container py-10 px-4">
@@ -68,6 +79,7 @@ export default function Produtos() {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estoque</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -82,7 +94,14 @@ export default function Produtos() {
                           categorias.find(categoria => categoria.id === produto.categoria_id)?.nome || "Categoria não encontrada"
                         }
                       </td>
-
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button
+                          onClick={() => handleEditClick(produto.id)}
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          Editar
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -92,10 +111,18 @@ export default function Produtos() {
         </div>
       </div>
 
-      {isModalOpen && categorias &&(
-        <AdicionarProdutoModal setIsOpen={setIsModalOpen} categorias={categorias} />
+      {isModalOpen && categorias && (
+        <AdicionarProdutoModal setIsOpen={setIsModalOpen} categorias={categorias} fetchProdutos={fetchProdutos} />
+      )}
+
+      {isModalEditarOpen && produtoIdEditar && categorias && (
+        <EditarProdutoModal
+          setIsOpen={setIsModalEditarOpen}
+          categorias={categorias}
+          fetchProdutos={fetchProdutos}
+          produtoId={produtoIdEditar}
+        />
       )}
     </div>
   )
 }
-

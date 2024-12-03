@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react"
 import api from "../../../utils/api"
 import AdicionarCategoriaModal from "../../../components/Categorias/AdicionarCategoriaModal"
+import EditarCategoriaModal from "../../../components/Categorias/EditarCategoriaModal"
 
-export default function Categorias() {
+export default function Produtos() {
   const [categorias, setCategorias] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalEditarOpen, setIsModalEditarOpen] = useState(false)
+  const [categoriaIdEditar, setCategoriaIdEditar] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -21,8 +24,13 @@ export default function Categorias() {
     } catch (error) {
       console.error("Erro ao buscar categorias:", error)
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
+  }
+
+  const handleEditClick = (categoriaId) => {
+    setCategoriaIdEditar(categoriaId)
+    setIsModalEditarOpen(true)
   }
 
   return (
@@ -54,6 +62,7 @@ export default function Categorias() {
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -61,6 +70,14 @@ export default function Categorias() {
                     <tr key={categoria.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{categoria.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{categoria.nome}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button
+                          onClick={() => handleEditClick(categoria.id)}
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          Editar
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -70,10 +87,17 @@ export default function Categorias() {
         </div>
       </div>
 
-      {isModalOpen && (
-        <AdicionarCategoriaModal setIsOpen={setIsModalOpen}/>
+      {isModalOpen && categorias && (
+        <AdicionarCategoriaModal setIsOpen={setIsModalOpen} fetchCategorias={fetchCategorias} />
+      )}
+
+      {isModalEditarOpen && categoriaIdEditar && categorias && (
+        <EditarCategoriaModal
+          setIsOpen={setIsModalEditarOpen}
+          fetchCategorias={fetchCategorias}
+          categoriaId={categoriaIdEditar}
+        />
       )}
     </div>
   )
 }
-
