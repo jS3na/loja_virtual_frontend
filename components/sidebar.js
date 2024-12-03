@@ -52,7 +52,7 @@ export function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-center h-20 shadow-md">
-            <h1 className="text-3xl font-bold text-indigo-100">Logo</h1>
+            <h1 className="text-3xl font-bold text-indigo-100">logo uwu</h1>
           </div>
 
           {/* Menu items */}
@@ -79,7 +79,7 @@ export function Sidebar() {
 
           {/* Footer */}
           <div className="p-4 bg-indigo-700 bg-opacity-50 backdrop-blur-sm">
-            <p className="text-sm text-indigo-200 text-center">© 2024 Sua Empresa</p>
+            <p className="text-sm text-indigo-200 text-center">© 2024 João Gabriel Sena</p>
           </div>
         </div>
       </div>
