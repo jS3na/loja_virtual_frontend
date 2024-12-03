@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../utils/api";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../utils/firebase";
 
 const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
     const [formData, setFormData] = useState({
@@ -9,38 +11,48 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
         preco: "",
         estoque: "",
         categoria_id: "",
-        image_url: null,
+        image: null,
     });
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false)
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, image: file });
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         try {
-            const data = new FormData();
-            data.append("nome", formData.nome);
-            data.append("descricao", formData.descricao);
-            data.append("preco", formData.preco);
-            data.append("estoque", formData.estoque);
-            data.append("categoria_id", formData.categoria_id);
 
+            let imageUrl = "";
             if (formData.image) {
-                console.log("Enviando imagem:", formData.image);
-                data.append("image", formData.image);
+                const storageRef = ref(storage, `produto_images/${formData.image.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, formData.image);
+
+                await uploadTask;
+                imageUrl = await getDownloadURL(storageRef);
             }
 
-            await api.post("/produtos/store", data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const productData = {
+                nome: formData.nome,
+                descricao: formData.descricao,
+                preco: formData.preco,
+                estoque: formData.estoque,
+                categoria_id: formData.categoria_id,
+                image_url: imageUrl,
+            };
 
+            await api.post("/produtos/store", productData);
             setMessage("Produto adicionado com sucesso!");
             setFormData({ nome: "", descricao: "", preco: "", estoque: "", categoria_id: "", image: null });
-            setIsOpen(false);
+
             fetchProdutos();
+            setIsOpen(false);
         } catch (error) {
             console.error("Erro ao adicionar o produto:", error);
             setMessage("Erro ao adicionar o produto. Tente novamente.");
@@ -48,7 +60,6 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
             setIsLoading(false);
         }
     };
-
 
     return (
         <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -114,16 +125,15 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
                                     </select>
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">Imagem</label>
+                                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">Imagem do Produto</label>
                                     <input
                                         type="file"
                                         id="image"
                                         accept="image/*"
-                                        onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                                        onChange={handleFileChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
                                 </div>
-
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                                     <button
                                         type="submit"

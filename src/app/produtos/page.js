@@ -107,7 +107,7 @@ export default function Produtos() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                         {produto.image_url && (
                           <img
-                            src={`${process.env.NEXT_PUBLIC_URL + produto.image_url}`}
+                            src={produto.image_url}
                             alt={produto.nome}
                             className="w-16 h-16 object-cover rounded-md"
                           />
