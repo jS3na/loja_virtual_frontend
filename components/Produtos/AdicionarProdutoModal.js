@@ -9,25 +9,46 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
         preco: "",
         estoque: "",
         categoria_id: "",
+        image_url: null,
     });
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false)
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await api.post("/produtos/store", formData);
-            setMessage("Produto adicionado com sucesso!");
-            setFormData({ nome: "", descricao: "", preco: "", estoque: "", categoria_id: "" });
+        setIsLoading(true);
 
-            setMessage("");
+        try {
+            const data = new FormData();
+            data.append("nome", formData.nome);
+            data.append("descricao", formData.descricao);
+            data.append("preco", formData.preco);
+            data.append("estoque", formData.estoque);
+            data.append("categoria_id", formData.categoria_id);
+
+            if (formData.image) {
+                console.log("Enviando imagem:", formData.image);
+                data.append("image", formData.image);
+            }
+
+            await api.post("/produtos/store", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            setMessage("Produto adicionado com sucesso!");
+            setFormData({ nome: "", descricao: "", preco: "", estoque: "", categoria_id: "", image: null });
             setIsOpen(false);
             fetchProdutos();
         } catch (error) {
             console.error("Erro ao adicionar o produto:", error);
             setMessage("Erro ao adicionar o produto. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
+
 
     return (
         <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -92,6 +113,17 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
                                         ))}
                                     </select>
                                 </div>
+                                <div className="mb-4">
+                                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">Imagem</label>
+                                    <input
+                                        type="file"
+                                        id="image"
+                                        accept="image/*"
+                                        onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                                     <button
                                         type="submit"

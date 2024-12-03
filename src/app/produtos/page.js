@@ -92,6 +92,7 @@ export default function Produtos() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagem</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estoque</th>
@@ -103,6 +104,15 @@ export default function Produtos() {
                   {produtos.map((produto) => (
                     <tr key={produto.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{produto.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        {produto.image_url && (
+                          <img
+                            src={`${process.env.NEXT_PUBLIC_URL + produto.image_url}`}
+                            alt={produto.nome}
+                            className="w-16 h-16 object-cover rounded-md"
+                          />
+                        )}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.nome}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ {produto.preco}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.estoque} unidade(s)</td>
