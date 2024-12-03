@@ -22,7 +22,7 @@ const AdicionarCategoriaModal = ({setIsOpen}) => {
         e.preventDefault();
         try {
             await api.post("/categorias/store", formData);
-            setMessage("Produto adicionado com sucesso!");
+            setMessage("Categoria adicionado com sucesso!");
             setFormData({ nome: "" });
             setTimeout(() => {
                 setMessage("");
@@ -60,7 +60,7 @@ const AdicionarCategoriaModal = ({setIsOpen}) => {
                                     type="submit"
                                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                                 >
-                                    Adicionar Produto
+                                    Adicionar Categoria
                                 </button>
                                 <button
                                     type="button"

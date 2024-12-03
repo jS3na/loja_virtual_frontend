@@ -6,11 +6,13 @@ import AdicionarProdutoModal from "../../../components/Produtos/AdicionarProduto
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([])
+  const [categorias, setCategorias] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchProdutos()
+    fetchCategorias()
   }, [])
 
   const fetchProdutos = async () => {
@@ -20,13 +22,22 @@ export default function Produtos() {
       setProdutos(response.data)
     } catch (error) {
       console.error("Erro ao buscar produtos:", error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
+  const fetchCategorias = async () => {
+    try {
+      const response = await api.get("/categorias");
+      setCategorias(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container py-10 px-4">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-6 bg-gray-50 border-b border-gray-200">
           <div className="flex justify-between items-center">
@@ -56,6 +67,7 @@ export default function Produtos() {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estoque</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -65,6 +77,12 @@ export default function Produtos() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.nome}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ {produto.preco}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.estoque} unidade(s)</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {
+                          categorias.find(categoria => categoria.id === produto.categoria_id)?.nome || "Categoria não encontrada"
+                        }
+                      </td>
+
                     </tr>
                   ))}
                 </tbody>
@@ -75,7 +93,7 @@ export default function Produtos() {
       </div>
 
       {isModalOpen && (
-        <AdicionarProdutoModal setIsOpen={setIsModalOpen}/>
+        <AdicionarProdutoModal setIsOpen={setIsModalOpen} categorias={categorias} />
       )}
     </div>
   )

@@ -26,7 +26,7 @@ export default function Categorias() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container py-10 px-4">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-6 bg-gray-50 border-b border-gray-200">
           <div className="flex justify-between items-center">

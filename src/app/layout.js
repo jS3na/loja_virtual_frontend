@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       >
         <div className="flex min-h-screen">
           <Sidebar />
-          <main className="flex-grow p-8 md:ml-64">
+          <main className="flex-grow p-8">
             {children}
           </main>
         </div>
