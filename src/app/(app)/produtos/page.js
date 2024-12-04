@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import api from "../../../utils/api"
-import AdicionarProdutoModal from "../../../components/Produtos/AdicionarProdutoModal"
-import EditarProdutoModal from "../../../components/Produtos/EditarProdutoModal"
+import api from "../../../../utils/api"
+import AdicionarProdutoModal from "@/components/Produtos/AdicionarProdutoModal"
+import EditarProdutoModal from "@/components/Produtos/EditarProdutoModal"
 import { Trash, Pen } from 'lucide-react'
 
 export default function Produtos() {

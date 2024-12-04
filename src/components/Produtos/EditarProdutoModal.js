@@ -1,29 +1,55 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 
-const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
+const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos }) => {
     const [formData, setFormData] = useState({
-        produto_id: "",
+        nome: "",
         descricao: "",
-        preco_promocao: "",
+        preco: "",
+        estoque: "",
+        categoria_id: "",
     });
     const [message, setMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProduto = async () => {
+            try {
+                const response = await api.get(`/produtos/${produtoId}`);
+                setFormData({
+                    nome: response.data.nome,
+                    descricao: response.data.descricao,
+                    preco: response.data.preco,
+                    estoque: response.data.estoque,
+                    categoria_id: response.data.categoria_id,
+                });
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Erro ao carregar o produto:", error);
+                setMessage("Erro ao carregar os dados do produto.");
+                setIsLoading(false);
+            }
+        };
+
+        fetchProduto();
+    }, [produtoId]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post("/promocoes/store", formData);
-            setMessage("Promoção adicionada com sucesso!");
-            setFormData({ produto_id: "", descricao: "", preco_promocao: "" });
-
-            setMessage("");
+            await api.put(`/produtos/update/${produtoId}`, formData);
+            setMessage("Produto atualizado com sucesso!");
             setIsOpen(false);
-            fetchPromocoes();
+            fetchProdutos();
         } catch (error) {
-            console.error("Erro ao adicionar o produto:", error);
-            setMessage("Erro ao adicionar o produto. Tente novamente.");
+            console.error("Erro ao atualizar o produto:", error);
+            setMessage("Erro ao atualizar o produto. Tente novamente.");
         }
     };
 
@@ -35,7 +61,7 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
                 <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Adicionar Nova Promoção
+                            Editar Produto
                         </h3>
                         {isLoading ? (
                             <div className="flex justify-center items-center h-32">
@@ -44,38 +70,52 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
                         ) : (
                             <form onSubmit={handleSubmit} className="mt-4">
                                 <div className="mb-4">
-                                    <label htmlFor="descricao" className="block text-sm font-medium text-gray-700">Descrição</label>
+                                    <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome</label>
                                     <input
                                         type="text"
-                                        id="descricao"
-                                        value={formData.descricao}
-                                        onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+                                        id="nome"
+                                        name="nome"
+                                        value={formData.nome}
+                                        onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="preco_promocao" className="block text-sm font-medium text-gray-700">Preço da Promoção</label>
+                                    <label htmlFor="preco" className="block text-sm font-medium text-gray-700">Preço</label>
                                     <input
                                         type="number"
-                                        id="preco_promocao"
+                                        id="preco"
+                                        name="preco"
                                         step="0.01"
-                                        value={formData.preco_promocao}
-                                        onChange={(e) => setFormData({ ...formData, preco_promocao: e.target.value })}
+                                        value={formData.preco}
+                                        onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label htmlFor="produto" className="block text-sm font-medium text-gray-700">Produto</label>
+                                    <label htmlFor="estoque" className="block text-sm font-medium text-gray-700">Estoque</label>
+                                    <input
+                                        type="number"
+                                        id="estoque"
+                                        name="estoque"
+                                        value={formData.estoque}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">Categoria</label>
                                     <select
-                                        id="produto"
-                                        value={formData.produto_id}
-                                        onChange={(e) => setFormData({ ...formData, produto_id: e.target.value })}
+                                        id="categoria"
+                                        name="categoria_id"
+                                        value={formData.categoria_id}
+                                        onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     >
-                                        <option value="">Selecione um Produto</option>
-                                        {produtos.map((produto) => (
-                                            <option key={produto.id} value={produto.id}>
-                                                {produto.nome}
+                                        <option value="">Selecione uma Categoria</option>
+                                        {categorias.map((categoria) => (
+                                            <option key={categoria.id} value={categoria.id}>
+                                                {categoria.nome}
                                             </option>
                                         ))}
                                     </select>
@@ -85,7 +125,7 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
                                         type="submit"
                                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                                     >
-                                        Adicionar Promoção
+                                        Atualizar Produto
                                     </button>
                                     <button
                                         type="button"
@@ -104,4 +144,4 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
     );
 };
 
-export default AdicionarPromocaoModal;
+export default EditarProdutoModal;

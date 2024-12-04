@@ -1,39 +1,31 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 
-const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos }) => {
+const EditarCategoriaModal = ({ setIsOpen, categoriaId, fetchCategorias }) => {
     const [formData, setFormData] = useState({
         nome: "",
-        descricao: "",
-        preco: "",
-        estoque: "",
-        categoria_id: "",
     });
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchProduto = async () => {
+        const fetchCategoria = async () => {
             try {
-                const response = await api.get(`/produtos/${produtoId}`);
+                const response = await api.get(`/categorias/${categoriaId}`);
                 setFormData({
                     nome: response.data.nome,
-                    descricao: response.data.descricao,
-                    preco: response.data.preco,
-                    estoque: response.data.estoque,
-                    categoria_id: response.data.categoria_id,
                 });
                 setIsLoading(false);
             } catch (error) {
-                console.error("Erro ao carregar o produto:", error);
-                setMessage("Erro ao carregar os dados do produto.");
+                console.error("Erro ao carregar a categoria:", error);
+                setMessage("Erro ao carregar os dados da categoria.");
                 setIsLoading(false);
             }
         };
 
-        fetchProduto();
-    }, [produtoId]);
+        fetchCategoria();
+    }, [categoriaId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,13 +35,13 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.put(`/produtos/update/${produtoId}`, formData);
-            setMessage("Produto atualizado com sucesso!");
+            await api.put(`/categorias/update/${categoriaId}`, formData);
+            setMessage("Categoria atualizado com sucesso!");
             setIsOpen(false);
-            fetchProdutos();
+            fetchCategorias();
         } catch (error) {
-            console.error("Erro ao atualizar o produto:", error);
-            setMessage("Erro ao atualizar o produto. Tente novamente.");
+            console.error("Erro ao atualizar a categoria:", error);
+            setMessage("Erro ao atualizar a categoria. Tente novamente.");
         }
     };
 
@@ -61,7 +53,7 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
                 <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Editar Produto
+                            Editar Categoria
                         </h3>
                         {isLoading ? (
                             <div className="flex justify-center items-center h-32">
@@ -80,52 +72,12 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />
                                 </div>
-                                <div className="mb-4">
-                                    <label htmlFor="preco" className="block text-sm font-medium text-gray-700">Preço</label>
-                                    <input
-                                        type="number"
-                                        id="preco"
-                                        name="preco"
-                                        step="0.01"
-                                        value={formData.preco}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="estoque" className="block text-sm font-medium text-gray-700">Estoque</label>
-                                    <input
-                                        type="number"
-                                        id="estoque"
-                                        name="estoque"
-                                        value={formData.estoque}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">Categoria</label>
-                                    <select
-                                        id="categoria"
-                                        name="categoria_id"
-                                        value={formData.categoria_id}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    >
-                                        <option value="">Selecione uma Categoria</option>
-                                        {categorias.map((categoria) => (
-                                            <option key={categoria.id} value={categoria.id}>
-                                                {categoria.nome}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                                     <button
                                         type="submit"
                                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
                                     >
-                                        Atualizar Produto
+                                        Atualizar Categoria
                                     </button>
                                     <button
                                         type="button"
@@ -144,4 +96,4 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
     );
 };
 
-export default EditarProdutoModal;
+export default EditarCategoriaModal;

@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, ShoppingBag, Users, Settings, HelpCircle, Menu, X, Tag, CirclePercent } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Users, Settings, HelpCircle, Menu, X, Tag, CirclePercent } from 'lucide-react'
 
 const menuItems = [
-  { icon: Home, label: 'Início', href: '/' },
+  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
   { icon: ShoppingBag, label: 'Produtos', href: '/produtos' },
   { icon: Tag, label: 'Categorias', href: '/categorias' },
   { icon: CirclePercent, label: 'Promoções', href: '/promocoes' },

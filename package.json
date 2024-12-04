@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@nextui-org/dropdown": "^2.1.31",
     "@nextui-org/react": "^2.4.8",
     "@radix-ui/react-slot": "^1.1.0",
@@ -18,7 +19,8 @@
     "lucide-react": "^0.462.0",
     "next": "15.0.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "eslint": "^8",

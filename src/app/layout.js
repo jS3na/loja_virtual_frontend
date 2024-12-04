@@ -1,36 +1,21 @@
-import localFont from "next/font/local";
-import "./globals.css";
-import { Sidebar } from "../../components/sidebar";
+import { Nunito } from 'next/font/google'
+import '@/app/global.css'
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const nunitoFont = Nunito({
+    subsets: ['latin'],
+    display: 'swap',
+})
+
+const RootLayout = ({ children }) => {
+    return (
+        <html lang="en" className={nunitoFont.className}>
+            <body className="antialiased">{children}</body>
+        </html>
+    )
+}
 
 export const metadata = {
-  title: "Painel do Admin",
-  description: "Painel do Admin de uma Loja Virtual",
-};
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-grow p-8">
-            {children}
-          </main>
-        </div>
-      </body>
-    </html>
-  );
+    title: 'Laravel',
 }
+
+export default RootLayout
