@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import api from "../../../utils/api"
-import AdicionarCategoriaModal from "../../../components/Categorias/AdicionarCategoriaModal"
-import EditarCategoriaModal from "../../../components/Categorias/EditarCategoriaModal"
+import api from "@/utils/api";
+import AdicionarCategoriaModal from "@/components/Categorias/AdicionarCategoriaModal"
+import EditarCategoriaModal from "@/components/Categorias/EditarCategoriaModal"
 
 export default function Produtos() {
   const [categorias, setCategorias] = useState([])
