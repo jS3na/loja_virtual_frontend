@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import api from "../../../../utils/api"
+import api from "@/utils/api"
 import AdicionarCategoriaModal from "@/components/Categorias/AdicionarCategoriaModal"
 import EditarCategoriaModal from "@/components/Categorias/EditarCategoriaModal"
 

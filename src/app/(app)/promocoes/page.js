@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import api from "../../../../utils/api"
+import api from "@/utils/api";
 import AdicionarPromocaoModal from "@/components/Promocoes/AdicionarPromocaoModal"
 import EditarPromocaoModal from "@/components/Promocoes/EditarPromocaoModal"
 import { Trash, Pen } from 'lucide-react'

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../../utils/api";
+import api from "@/utils/api";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../utils/firebase";
+import { storage } from "@/utils/firebase";
 
 const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
     const [formData, setFormData] = useState({

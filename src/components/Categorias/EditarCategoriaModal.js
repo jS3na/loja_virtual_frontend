@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../../utils/api";
+import api from "@/utils/api";
 
 const EditarCategoriaModal = ({ setIsOpen, categoriaId, fetchCategorias }) => {
     const [formData, setFormData] = useState({

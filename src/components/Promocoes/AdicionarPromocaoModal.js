@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../../utils/api";
+import api from "@/utils/api";
 
 const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
     const [formData, setFormData] = useState({
