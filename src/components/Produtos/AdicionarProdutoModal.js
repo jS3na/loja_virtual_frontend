@@ -88,6 +88,16 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
                                     />
                                 </div>
                                 <div className="mb-4">
+                                    <label htmlFor="descricao" className="block text-sm font-medium text-gray-700">Descrição</label>
+                                    <input
+                                        type="text"
+                                        id="descricao"
+                                        value={formData.descricao}
+                                        onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                                <div className="mb-4">
                                     <label htmlFor="preco" className="block text-sm font-medium text-gray-700">Preço</label>
                                     <input
                                         type="number"
@@ -135,12 +145,18 @@ const AdicionarProdutoModal = ({ setIsOpen, categorias, fetchProdutos }) => {
                                     />
                                 </div>
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                    <button
-                                        type="submit"
-                                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
-                                    >
-                                        Adicionar Produto
-                                    </button>
+                                    {isLoading ? (
+                                        <div className="flex justify-center items-center h-32">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            type="submit"
+                                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                                        >
+                                            Adicionar Produto
+                                        </button>
+                                    )}
                                     <button
                                         type="button"
                                         onClick={() => setIsOpen(false)}

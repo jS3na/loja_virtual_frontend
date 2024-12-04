@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import api from "@/utils/api";
 import AdicionarCategoriaModal from "@/components/Categorias/AdicionarCategoriaModal"
 import EditarCategoriaModal from "@/components/Categorias/EditarCategoriaModal"
+import { Pen } from 'lucide-react'
 
 export default function Produtos() {
   const [categorias, setCategorias] = useState([])
@@ -70,13 +71,16 @@ export default function Produtos() {
                     <tr key={categoria.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{categoria.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{categoria.nome}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button
-                          onClick={() => handleEditClick(categoria.id)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          Editar
-                        </button>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEditClick(categoria.id)}
+                            className="flex items-center px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+                          >
+                            <Pen className="w-6 h-6 mr-3" />
+                            Editar
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

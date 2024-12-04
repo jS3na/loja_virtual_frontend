@@ -7,7 +7,7 @@ const EditarCategoriaModal = ({ setIsOpen, categoriaId, fetchCategorias }) => {
         nome: "",
     });
     const [message, setMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategoria = async () => {
@@ -33,6 +33,7 @@ const EditarCategoriaModal = ({ setIsOpen, categoriaId, fetchCategorias }) => {
     };
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             await api.put(`/categorias/update/${categoriaId}`, formData);
@@ -42,6 +43,8 @@ const EditarCategoriaModal = ({ setIsOpen, categoriaId, fetchCategorias }) => {
         } catch (error) {
             console.error("Erro ao atualizar a categoria:", error);
             setMessage("Erro ao atualizar a categoria. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
 

@@ -42,6 +42,7 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             await api.put(`/produtos/update/${produtoId}`, formData);
             setMessage("Produto atualizado com sucesso!");
@@ -50,6 +51,8 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
         } catch (error) {
             console.error("Erro ao atualizar o produto:", error);
             setMessage("Erro ao atualizar o produto. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -76,6 +79,17 @@ const EditarProdutoModal = ({ setIsOpen, categorias, produtoId, fetchProdutos })
                                         id="nome"
                                         name="nome"
                                         value={formData.nome}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="descricao" className="block text-sm font-medium text-gray-700">Descrição</label>
+                                    <input
+                                        type="text"
+                                        id="descricao"
+                                        name="descricao"
+                                        value={formData.descricao}
                                         onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     />

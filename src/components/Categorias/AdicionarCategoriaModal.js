@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import api from "@/utils/api";
 
-const AdicionarCategoriaModal = ({setIsOpen, fetchCategorias}) => {
+const AdicionarCategoriaModal = ({ setIsOpen, fetchCategorias }) => {
     const [formData, setFormData] = useState({
         nome: "",
         descricao: "",
@@ -12,13 +12,10 @@ const AdicionarCategoriaModal = ({setIsOpen, fetchCategorias}) => {
         estoque: "",
     });
     const [message, setMessage] = useState("");
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             await api.post("/categorias/store", formData);
@@ -31,6 +28,8 @@ const AdicionarCategoriaModal = ({setIsOpen, fetchCategorias}) => {
         } catch (error) {
             console.error("Erro ao adicionar o produto:", error);
             setMessage("Erro ao adicionar o produto. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -44,33 +43,39 @@ const AdicionarCategoriaModal = ({setIsOpen, fetchCategorias}) => {
                         <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                             Adicionar Nova Categoria
                         </h3>
-                        <form onSubmit={handleSubmit} className="mt-4">
-                            <div className="mb-4">
-                                <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome</label>
-                                <input
-                                    type="text"
-                                    id="nome"
-                                    value={formData.nome}
-                                    onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
+                        {isLoading ? (
+                            <div className="flex justify-center items-center h-32">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                             </div>
-                            <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                <button
-                                    type="submit"
-                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
-                                >
-                                    Adicionar Categoria
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsOpen(false)}
-                                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
-                        </form>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="mt-4">
+                                <div className="mb-4">
+                                    <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome</label>
+                                    <input
+                                        type="text"
+                                        id="nome"
+                                        value={formData.nome}
+                                        onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                                <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                    <button
+                                        type="submit"
+                                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm"
+                                    >
+                                        Adicionar Categoria
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsOpen(false)}
+                                        className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        )}
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             await api.post("/promocoes/store", formData);
@@ -24,6 +25,8 @@ const AdicionarPromocaoModal = ({ setIsOpen, produtos, fetchPromocoes }) => {
         } catch (error) {
             console.error("Erro ao adicionar o produto:", error);
             setMessage("Erro ao adicionar o produto. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
 

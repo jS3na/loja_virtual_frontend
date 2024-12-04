@@ -37,6 +37,7 @@ const EditarPromocaoModal = ({ setIsOpen, produtos, promocaoId, fetchPromocoes }
     };
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             await api.put(`/promocoes/update/${promocaoId}`, formData);
@@ -46,6 +47,8 @@ const EditarPromocaoModal = ({ setIsOpen, produtos, promocaoId, fetchPromocoes }
         } catch (error) {
             console.error("Erro ao atualizar a promoção:", error);
             setMessage("Erro ao atualizar a promoção. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
