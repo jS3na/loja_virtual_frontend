@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: process.env.NEXT_PUBLIC_AUTH_URL,
     withCredentials: true,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
