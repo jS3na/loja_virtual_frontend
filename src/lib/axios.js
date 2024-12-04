@@ -1,23 +1,20 @@
-import Axios from 'axios';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const axios = Axios.create({
-    baseURL: process.env.NEXT_PUBLIC_AUTH_URL,
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:8000',
+    withCredentials: true,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
-    withCredentials: true,
 });
 
-axios.interceptors.request.use(async (config) => {
-    const xsrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('XSRF-TOKEN='))
-        ?.split('=')[1];
-
-    if (xsrfToken) {
-        config.headers['X-CSRF-TOKEN'] = decodeURIComponent(xsrfToken);
+axiosInstance.interceptors.request.use((config) => {
+    const csrfToken = Cookies.get('XSRF-TOKEN');
+    if (csrfToken) {
+        config.headers['X-XSRF-TOKEN'] = csrfToken;
     }
     return config;
 });
 
-export default axios;
+export default axiosInstance;
